@@ -1,0 +1,212 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>kittens Jquery</title>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <style>
+    .fa { color: #fff; }
+</style>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="slider-main">
+
+<button id="prev"><i class="fa fa-angle-double-left"></i></button>
+
+<div id="slider"><img src="https://picsum.photos/1920/1200?image=856" class="img-slide img0 image-animated"></div>
+
+    <button id="next"><i class="fa fa-angle-double-right"></i></button>
+
+    <div id="circles"><div id="0" class="circle" onclick="circleClick(0)" style="background: rgb(255, 255, 255); color: rgb(255, 255, 255);"> </div> <div id="1" class="circle" onclick="circleClick(1)" style="background: transparent; color: transparent;"> </div> <div id="2" class="circle" onclick="circleClick(2)" style="background: transparent; color: transparent;"> </div> <div id="3" class="circle" onclick="circleClick(3)" style="background: transparent; color: transparent;"> </div> <div id="4" class="circle" onclick="circleClick(4)" style="background: transparent; color: transparent;"> </div> </div>
+
+</div>
+<script>
+var arr=['https://i.imgur.com/ChvPuol.jpg','https://i.imgur.com/3S8X6yP.jpg','http://eskipaper.com/images/cute-baby-kittens-5.jpg','https://wallpaperplay.com/walls/full/a/0/8/240374.jpg','https://hdqwalls.com/download/cute-kittens-lg-1920x1080.jpg']; //an array of image sources
+var pos=0; //initializes image position in the array
+$(document).ready(function () {
+    var loaderHtml='';
+    arr.forEach(function (src) {
+        loaderHtml+='<img src="'+src+'">';
+    });
+
+    $('.load-images').html(loaderHtml);
+
+    var htm='';
+    /* initializes the small circles html*/
+    for(var i=0;i<arr.length;i++){
+        htm+='<div id="'+i+'" class="circle" onclick="circleClick('+i+')"> </div> ';
+
+    }
+
+    $('#circles').html(htm);//show small circles
+    $('#slider').html('<img src="'+arr[0]+'" class="img-slide image-animated"">');//show first image
+    $('#0').css({'background':'#fff', 'color':'#fff'});//sets the background of the first small circle to black
+
+    /* displays next image */
+    function next(){
+        if(pos>arr.length-2){
+            pos=-1;
+        }
+        $('#slider').html('<img src="'+arr[pos+1]+'" class="img-slide image-animated">');//show image
+        pos++;
+
+        $('#'+pos).css({'background':'#fff', 'color':'#fff'});//sets background-color of circle representing the current active image to black
+        $('#'+(pos-1)).css({'background':'transparent', 'color':'transparent'});//sets background-color of circle before active to white
+        if(pos==0){
+            $('#'+(arr.length-1)).css({'background':'transparent', 'color':'transparent'});
+        }
+    }
+    /* end of function next  */
+
+    /* displays previous image */
+    function previous() {
+        if(pos<1){
+            pos=arr.length;
+        }
+        $('#slider').html('<img src="'+arr[pos-1]+'" class="img-slide image-animated">');
+        pos--;
+
+        $('#'+pos).css({'background':'#fff', 'color':'#fff'});//sets background-color of circle representing the current active image to black
+        $('#'+(pos+1)).css({'background':'transparent', 'color':'transparent'});//sets background-color of circle before active to white
+        if(pos==arr.length-1){
+            $('#0').css({'background':'transparent', 'color':'transparent'});
+        }
+    }
+    /* end of function previous */
+
+    /* onclick next */
+    $('#next').on('click',function (e) {
+        e.preventDefault();
+        next();//call function next
+    });
+    /* end of onclick next */
+
+    /* onclick previous */
+    $('#prev').on('click',function (e) {
+        e.preventDefault();
+        previous();//call function previous
+    });
+    /* end of onclick previous */
+
+});
+
+/* displays image represented by the small circle */
+function circleClick(position) {
+    if(position!=pos){
+        $('#slider').html('<img src="'+arr[position]+'" class="img-slide image-animated">');//show image
+
+        $('#'+position).css({'background':'#fff', 'color':'#fff'});//sets background-color of circle representing the current active image to black
+        $('#'+(pos)).css({'background':'transparent', 'color':'transparent'});//sets background-color of circle before active to white
+
+        pos=position;
+    }
+    /* end of function circleClick */
+
+
+}</script>
+<style>#slider-main{
+    width: 100%;
+    overflow: hidden;
+}
+.img-slide{
+    width: 100%;
+    height: 100vh;
+    z-index: 5;
+    overflow-y: hidden;
+}
+#prev{
+    z-index: 10;
+    color: #000;
+    position: absolute;
+    background: transparent;
+    border: none;
+    margin-top: 40vh;
+    margin-left: 3%;
+    font-size: 60px !important;
+}
+#next{
+    color: #000;
+    position: absolute;
+    z-index: 100;
+    background: transparent;
+    border: none;
+    margin-top: -60vh;
+    margin-left: 93.5%;
+    font-size: 60px !important;
+}
+.circle{
+    border: #ccc 3px solid;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background: transparent;
+    display: inline-block;
+    cursor: pointer;
+}
+#circles{
+    margin-top: -15vh;
+    margin-left: 48.6%;
+    position: absolute;
+    z-index: 9000;
+}
+
+@media (max-width: 767px) {
+    .img-slide{
+        height: 40vh;
+    }
+    #prev{
+        font-size: 30px !important;
+        margin-top: 12vh;
+        margin-left: 0.5%;
+    }
+    #next{
+        font-size: 30px !important;
+        margin-top: -28vh;
+        margin-left: 88%;
+    }
+    .circle{
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+    }
+    #circles{
+        margin-top: -10vh;
+        margin-left: 36%;
+    }
+}</style>
+<script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js"></script><script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+<script>
+try {
+  fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js", { method: 'HEAD', mode: 'no-cors' })).then(function(response) {
+    return true;
+  }).catch(function(e) {
+    var carbonScript = document.createElement("script");
+    carbonScript.src = "//cdn.carbonads.com/carbon.js?serve=CK7DKKQU&placement=wwwjqueryscriptnet";
+    carbonScript.id = "_carbonads_js";
+    document.getElementById("carbon-block").appendChild(carbonScript);
+  });
+} catch (error) {
+  console.log(error);
+}
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</body>
+</html>
